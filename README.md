@@ -19,8 +19,8 @@ A scalable backend system that allows users to submit and execute code securely 
 ## Clone project
 
 ```bash
-git clone <your-repo>
-cd <your-repo>
+git clone live_code_execution_system
+cd live_code_execution
 ```
 
 ## docker
