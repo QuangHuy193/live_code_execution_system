@@ -1,0 +1,19 @@
+{
+  "name": "live_code_execution",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node api/server.js",
+    "worker": "node worker/worker.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bullmq": "^5.71.0",
+    "express": "^5.2.1",
+    "ioredis": "^5.10.0",
+    "pg": "^8.20.0"
+  }
+}
