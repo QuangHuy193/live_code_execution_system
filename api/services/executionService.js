@@ -11,10 +11,22 @@ exports.enqueueExecution = async (sessionId) => {
     [executionId, sessionId],
   );
 
-  await queue.add("code-execution", {
-    executionId,
-    sessionId,
-  });
+  await queue.add(
+    "code-execution",
+    {
+      executionId,
+      sessionId,
+    },
+    {
+      attempts: 3, // [Retry] Thử lại tối đa 3 lần nếu Worker bị sập hoặc lỗi logic
+      backoff: {
+        type: "exponential", // Thử lại theo lũy thừa (1s, 2s, 4s...)
+        delay: 2000, // Thời gian chờ cơ bản là 2s
+      },
+      removeOnComplete: true, // Dọn dẹp job sau khi xong để nhẹ Redis
+      removeOnFail: false,
+    },
+  );
 
   return executionId;
 };

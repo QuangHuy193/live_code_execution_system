@@ -6,7 +6,6 @@ CREATE TABLE code_sessions (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE executions (
     id UUID PRIMARY KEY,
     session_id UUID REFERENCES code_sessions(id),

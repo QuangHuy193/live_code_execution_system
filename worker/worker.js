@@ -3,7 +3,6 @@ const IORedis = require("ioredis");
 const pool = require("../db/db");
 const { spawn } = require("child_process");
 const crypto = require("crypto");
-const fs = require("fs");
 
 const connection = new IORedis(process.env.REDIS_URL, {
   maxRetriesPerRequest: null,
@@ -80,7 +79,14 @@ const worker = new Worker(
       );
     }
   },
-  { connection },
+  {
+    connection,
+    concurrency: 5,
+    // [Concurrency Control] Chỉ chạy tối đa 5 Sandbox cùng lúc để tránh treo RAM
+    settings: {
+      lockDuration: 30000, // 30 giây để đảm bảo Worker không bị mất quyền xử lý khi đang chạy Docker
+    },
+  },
 );
 
 /* ==============================
@@ -110,7 +116,7 @@ async function runCode(language, code) {
     const dockerArgs = [
       "run",
       "--rm",
-      "-i", // Quan trọng: Cho phép nhận input từ STDIN
+      "-i", // Cho phép nhận input từ STDIN
       `--name=${containerName}`,
       "--cpus=0.5",
       "--memory=128m",
